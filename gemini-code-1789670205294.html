@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IA Legal - Asistente para la Toma de Decisiones en Derecho Civil</title>
+    <style>
+        :root {
+            --primary: #1e293b;
+            --secondary: #2563eb;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #0f172a;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            background: var(--primary);
+            color: white;
+            border-radius: 12px;
+            margin-bottom: 25px;
+        }
+
+        header h1 {
+            margin: 0 0 10px 0;
+            font-size: 1.8rem;
+        }
+
+        header p {
+            margin: 0;
+            color: #94a3b8;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+
+        h2 {
+            margin-top: 0;
+            color: var(--primary);
+            font-size: 1.3rem;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 8px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: 600;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 0.95rem;
+        }
+
+        button {
+            margin-top: 20px;
+            width: 100%;
+            padding: 12px;
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background-color: #1d4ed8;
+        }
+
+        .result-box {
+            display: none;
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .risk-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .risk-low { background-color: #16a34a; }
+        .risk-medium { background-color: #d97706; }
+        .risk-high { background-color: #dc2626; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <header>
+        <h1>LexAssist AI — Toma de Decisiones Legales</h1>
+        <p>Sistema Inteligente de Evaluación de Riesgos Contractuales en Derecho Civil</p>
+    </header>
+
+    <!-- 1. Breve descripción del problema -->
+    <div class="card">
+        <h2>1. Descripción de la Problemática</h2>
+        <p>En el área del Derecho Civil, la revisión previa de contratos de arrendamiento, compraventa y prestaciones de servicios suele requerir horas de análisis manual. La falta de identificación oportuna de cláusulas abusivas o vacíos legales genera litigios costosos e innecesarios.</p>
+        <p><strong>Solución propuesta:</strong> Un modelo predictivo basado en inteligencia artificial que evalúa los datos clave de una situación contractual para estimar el nivel de riesgo jurídico y recomendar acciones preventivas en segundos.</p>
+    </div>
+
+    <!-- 2. Formulario de ingreso de información -->
+    <div class="card">
+        <h2>2. Ingreso de Datos del Caso</h2>
+        <form id="legalForm">
+            <label for="tipoContrato">Tipo de Acto o Contrato:</label>
+            <select id="tipoContrato" required>
+                <option value="">Seleccione una opción...</option>
+                <option value="arrendamiento">Arrendamiento de Inmueble</option>
+                <option value="compraventa">Compraventa de Bienes</option>
+                <option value="prestacion">Prestación de Servicios</option>
+            </select>
+
+            <label for="monto">Valor del Contrato (COP / USD):</label>
+            <input type="number" id="monto" placeholder="Ej: 5000000" required>
+
+            <label for="clausulaPenal">¿Incluye Cláusula Penal o Multa?</label>
+            <select id="clausulaPenal" required>
+                <option value="si">Sí</option>
+                <option value="no">No</option>
+            </select>
+
+            <label for="garantias">¿Cuenta con Garantías/Fiador respaldado?</label>
+            <select id="garantias" required>
+                <option value="si">Sí</option>
+                <option value="no">No</option>
+            </select>
+
+            <label for="descripcion">Breve descripción de la situación o conflicto:</label>
+            <textarea id="descripcion" rows="3" placeholder="Describa brevemente si hay incumplimiento, morosidad o dudas en el contrato..." required></textarea>
+
+            <button type="button" onclick="simularAnalisisIA()">Analizar Caso con IA</button>
+        </form>
+
+        <!-- 3. Simulación de análisis / recomendación -->
+        <div id="resultado" class="result-box">
+            <h3>Resultado de la Simulación de IA</h3>
+            <div id="badge" class="risk-badge"></div>
+            <p><strong>Análisis de Diagnóstico:</strong> <span id="diagnostico"></span></p>
+            <p><strong>Recomendación Estratégica:</strong> <span id="recomendacion"></span></p>
+        </div>
+    </div>
+
+    <!-- 4. Conclusión -->
+    <div class="card">
+        <h2>3. Conclusión sobre la Utilidad de la IA en el Derecho</h2>
+        <p>La inteligencia artificial no reemplaza el criterio ni la ética del abogado, pero actúa como un multiplicador de eficiencia en la toma de decisiones. Permite procesar de manera preventiva grandes volúmenes de datos, estandarizar la identificación de riesgos jurídicos y agilizar la atención de consultas preliminares, permitiendo al profesional del derecho enfocarse en la estrategia sustantiva y la conciliación.</p>
+    </div>
+
+</div>
+
+<script>
+    function simularAnalisisIA() {
+        const contrato = document.getElementById('tipoContrato').value;
+        const penal = document.getElementById('clausulaPenal').value;
+        const garantias = document.getElementById('garantias').value;
+
+        if (!contrato) {
+            alert("Por favor seleccione un tipo de contrato.");
+            return;
+        }
+
+        const resultBox = document.getElementById('resultado');
+        const badge = document.getElementById('badge');
+        const diagnostico = document.getElementById('diagnostico');
+        const recomendacion = document.getElementById('recomendacion');
+
+        let riesgo = 'Bajo';
+        let badgeClass = 'risk-low';
+        let diagText = '';
+        let recText = '';
+
+        if (penal === 'no' && garantias === 'no') {
+            riesgo = 'Riesgo Alto';
+            badgeClass = 'risk-high';
+            diagText = 'El contrato presenta alta vulnerabilidad por falta de garantías de cumplimiento y ausencia de penalización por mora.';
+            recText = 'Se sugiere incorporar una cláusula penal moratoria y exigir un fiador o póliza de arrendamiento antes de la firma.';
+        } else if (penal === 'no' || garantias === 'no') {
+            riesgo = 'Riesgo Medio';
+            badgeClass = 'risk-medium';
+            diagText = 'El acuerdo contiene mecanismos de protección parciales, pero existe exposición a demoras en el pago o cumplimiento.';
+            recText = 'Se recomienda ajustar las cláusulas de rescisión e incluir mecanismos alternativos de solución de conflictos (Conciliación).';
+        } else {
+            riesgo = 'Riesgo Bajo';
+            badgeClass = 'risk-low';
+            diagText = 'Estructura contractual sólida con resguardos jurídicos adecuados para ambas partes.';
+            recText = 'El contrato está listo para firma. Se recomienda autenticar las firmas ante notaría pública.';
+        }
+
+        badge.className = `risk-badge ${badgeClass}`;
+        badge.innerText = `Nivel de Riesgo: ${riesgo}`;
+        diagnostico.innerText = diagText;
+        recomendacion.innerText = recText;
+
+        resultBox.style.display = 'block';
+    }
+</script>
+
+</body>
+</html>
